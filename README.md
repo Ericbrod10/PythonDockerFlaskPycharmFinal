@@ -1,5 +1,12 @@
 # Project Description
-This project is a homework assignment 3 to teach how to get Pycharm setup with Docker, Flask, MySQL, and Postman
 
-Note: This repository was initially cloned from Part 2 of this assignment which is located in this [PythonDockerFlaskPycharmHW2](https://github.com/Ericbrod10/PythonDockerFlaskPycharmHW2) and that initially came from the first repository of Part 1 in [PythonDockerFlaskPycharm](https://github.com/Ericbrod10/PythonDockerFlaskPycharm)
+## REST API with Flask, Docker, PyCharm, Postman and MySQL (Homework 4 - Final)
+
+### Overview
+In this project you will need to create a REST API and use Postman to test the GET, POST, PUT, and DELETE request
+methods. You will need to get my project to run on the assignment 4 branch, so you can see how everything
+works and then create your own project with new data but having the exact same functionality.
+
+
+Note: This repository was initially cloned from Part 3 of this assignment which is located in this [PythonDockerFlaskPycharmHW3](https://github.com/Ericbrod10/PythonDockerFlaskPycharmHW3).
 
