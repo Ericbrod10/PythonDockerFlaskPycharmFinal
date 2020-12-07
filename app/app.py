@@ -65,7 +65,7 @@ def form_insert_post():
     inputData = (request.form.get('Living_Space_sq_ft'), request.form.get('Beds'), request.form.get('Baths'),
                  request.form.get('Zip'), request.form.get('Year'),
                  request.form.get('List_Price'))
-    sql_insert_query = """INSERT INTO zillow (Living_Space_sq_ft,Beds,Baths,Zip,Year,List_Price) VALUES (%s, %s,%s, %s,%s, %s) """
+    sql_insert_query = """INSERT INTO zillow (Living_Space_sq_ft,Beds,Baths,Zip,Year,List_Price) VALUES (%s, %s,%s, %s, %s, %s) """
     cursor.execute(sql_insert_query, inputData)
     mysql.get_db().commit()
     return redirect("/", code=302)
@@ -85,10 +85,62 @@ def api_browse() -> str:
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM zillow')
     result = cursor.fetchall()
-    json_result = json.dumps(result);
+    json_result = json.dumps(result)
     resp = Response(json_result, status=200, mimetype='application/json')
     return resp
 
+
+@app.route('/api/v1/zillow/<int:zillow_id>', methods=['GET'])
+def api_retrieve(zillow_id) -> str:
+    cursor = mysql.get_db().cursor()
+    cursor.execute('SELECT * FROM zillow WHERE id=%s', zillow_id)
+    result = cursor.fetchall()
+    json_result = json.dumps(result)
+    resp = Response(json_result, status=200, mimetype='application/json')
+    return resp
+
+
+@app.route('/api/v1/zillow/<int:zillow_id>', methods=['PUT'])
+def api_edit(zillow_id) -> str:
+    cursor = mysql.get_db().cursor()
+    content = request.json
+    # Update these
+    inputData = (content['Living_Space_sq_ft'], content['Beds'], content['Baths'],
+                 content['Zip'], content['Year'], content['List_Price'], zillow_id)
+
+    sql_update_query = """UPDATE zillow z SET z.Living_Space_sq_ft = %s, z.Beds = %s, z.Baths = %s, z.Zip = 
+    %s, z.Year = %s, z.List_Price = %s WHERE z.id = %s """
+
+    cursor.execute(sql_update_query, inputData)
+    mysql.get_db().commit()
+    resp = Response(status=200, mimetype='application/json')
+    return resp
+
+
+@app.route('/api/v1/zillow', methods=['POST'])
+def api_add() -> str:
+
+    content = request.json
+    cursor = mysql.get_db().cursor()
+    # Update these
+    inputData = (content['Living_Space_sq_ft'], content['Beds'], content['Baths'], content['Zip'], content['Year'],
+                 content['List_Price'])
+    sql_insert_query = """INSERT INTO zillow (Living_Space_sq_ft, Beds, Baths, Zip, Year, List_Price) 
+                        VALUES (%s, %s,%s, %s,%s, %s) """
+    cursor.execute(sql_insert_query, inputData)
+    mysql.get_db().commit()
+    resp = Response(status=201, mimetype='application/json')
+    return resp
+
+
+@app.route('/api/v1/zillow/<int:zillow_id>', methods=['DELETE'])
+def api_delete(zillow_id) -> str:
+    cursor = mysql.get_db().cursor()
+    sql_delete_query = """DELETE FROM zillow WHERE id = %s """
+    cursor.execute(sql_delete_query, zillow_id)
+    mysql.get_db().commit()
+    resp = Response(status=200, mimetype='application/json')
+    return resp
 
 
 if __name__ == '__main__':
